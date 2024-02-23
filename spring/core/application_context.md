@@ -148,6 +148,91 @@ In Spring, ApplicationContext serves as a pivotal component, acting as the backb
     }
     ```
 
-**Conclusion:**
+## Creating ApplicationContext Instances in Spring
 
-In essence, ApplicationContext in Spring encapsulates the essential functionalities required for robust application development. It simplifies bean management, promotes modularization, and empowers developers with a versatile toolset for crafting sophisticated Spring applications. From initialization to event handling, ApplicationContext stands as an indispensable component, driving the core mechanics of the Spring ecosystem.
+There are several ways to create a new instance of an ApplicationContext, depending on the type of application and configuration method used.
+
+### Non-Web Applications:
+
+#### 1. AnnotationConfigApplicationContext:
+   - Suitable for Java-based configuration using annotations.
+   - **Example**:
+     ```java
+     AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+     ```
+
+#### 2. ClassPathXmlApplicationContext:
+   - Loads application context configuration from XML files in the classpath.
+   - **Example**:
+     ```java
+     ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+     ```
+
+#### 3. FileSystemXmlApplicationContext:
+   - Loads application context configuration from XML files in the file system.
+   - **Example**:
+     ```java
+     FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext("path/to/applicationContext.xml");
+     ```
+
+### Web Applications:
+
+#### 1. Servlet 2 (web.xml):
+   - Uses `ContextLoaderListener` or `DispatcherServlet` to initialize the Spring container.
+   - **Example (ContextLoaderListener)**:
+     ```xml
+     <context-param>
+         <param-name>contextConfigLocation</param-name>
+         <param-value>/WEB-INF/applicationContext.xml</param-value>
+     </context-param>
+     <listener>
+         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+     </listener>
+     ```
+
+#### 2. Servlet 3 (XmlWebApplicationContext):
+   - Uses `XmlWebApplicationContext` for XML-based configuration in Servlet 3.
+   - **Example**:
+     ```java
+     XmlWebApplicationContext context = new XmlWebApplicationContext();
+     context.setConfigLocation("/WEB-INF/applicationContext.xml");
+     ```
+
+#### 3. Servlet 3 (AnnotationConfigWebApplicationContext):
+   - Uses `AnnotationConfigWebApplicationContext` for Java-based configuration in Servlet 3.
+   - **Example**:
+     ```java
+     AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+     context.register(AppConfig.class);
+     ```
+
+### Spring Boot Applications:
+
+#### 1. SpringBootConsoleApplication:
+   - Utilizes `CommandLineRunner` for running tasks in a Spring Boot console application.
+   - **Example**:
+     ```java
+     @SpringBootApplication
+     public class SpringBootConsoleApplication implements CommandLineRunner {
+         public static void main(String[] args) {
+             SpringApplication.run(SpringBootConsoleApplication.class, args);
+         }
+         
+         @Override
+         public void run(String... args) throws Exception {
+             // Spring Boot console application logic
+         }
+     }
+     ```
+
+#### 2. SpringBootWebApplication:
+   - Embeds Tomcat server for running Spring Boot web applications.
+   - **Example**:
+     ```java
+     @SpringBootApplication
+     public class SpringBootWebApplication {
+         public static void main(String[] args) {
+             SpringApplication.run(SpringBootWebApplication.class, args);
+         }
+     }
+     ```
